@@ -1,5 +1,5 @@
 const fs = require("fs")
-const Octokit = require('@octokit/rest').Octokit
+// const { Octokit } = require('@octokit/rest')
 const { exec } = require("child_process")
 const path = require("path")
 let ENVIRONMENT = require('../Environment')
@@ -7,6 +7,14 @@ const simpleGit = require("simple-git")
 
 const forkPluginRepos = async () => {
   return new Promise(forkPluginReposPromise)
+}
+
+const initOctokit = async (token) => {
+  const { Octokit } = await import('@octokit/rest')
+  return new Octokit({
+    auth: token,
+    userAgent: 'Superalgos'
+  })
 }
 
 const forkPluginReposPromise = async (resolve) => {
@@ -17,10 +25,7 @@ const forkPluginReposPromise = async (resolve) => {
     resolve()
     return
   }
-  const octokit = new Octokit({
-    auth: token,
-    userAgent: 'Superalgos'
-  })
+  const octokit = await initOctokit(token)
   let reponsesCount = 0
   for (const propertyName in global.env.PROJECT_PLUGIN_MAP) {
     let repo = global.env.PROJECT_PLUGIN_MAP[propertyName].repo

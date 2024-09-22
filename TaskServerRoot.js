@@ -42,31 +42,33 @@ async function runRoot() {
   Setting up external dependencies.
   */
   SA.nodeModules = {
-    fs: require('fs'),
-    util: require('util'),
-    path: require('path'),
-    ws: require('ws'),
-    ip: require('ip'),
-    telegraf: require('telegraf'),
-    https: require('https'),
-    http: require('http'),
-    web3: require('web3'),
-    nodeFetch: require('node-fetch'),
-    ccxt: require('ccxt'),
-    ccxtMisc: require('./node_modules/ccxt/js/base/functions/misc'),
-    lookpath: require('lookpath'),
-    twitter: require('twitter-api-v2'),
-    slack: require('@slack/web-api'),
-    discordjs: require('discord.js'),
-    discordRest: require('@discordjs/rest'),
-    discordTypes: require('discord-api-types/v9'),
-    octokit: require('@octokit/rest'),
-    graphql: require('@octokit/graphql'),
-    axios: require('axios'),
-    crypto: require('crypto'),
-    simpleGit: require('simple-git'),
-    ethers: require('ethers'),
-    vaderSentiment: require('vader-sentiment')
+    fs: await import('fs').then(module => module.default),
+    util: await import('util').then(module => module.default),
+    path: await import('path').then(module => module.default),
+    ws: await import('ws').then(module => module.default),
+    ip: await import('ip').then(module => module.default),
+    telegraf: await import('telegraf').then(module => module.default),
+    https: await import('https').then(module => module.default),
+    http: await import('http').then(module => module.default),
+    web3: await import('web3').then(module => module.default),
+    nodeFetch: await import('node-fetch').then(module => module.default),
+    ccxt: await import('ccxt').then(module => {
+      const ccxtMisc = module.default.functions;
+      return { default: module.default, misc: ccxtMisc };
+    }),
+    lookpath: await import('lookpath').then(module => module.default),
+    twitter: await import('twitter-api-v2').then(module => module.default),
+    slack: await import('@slack/web-api').then(module => module.default),
+    discordjs: await import('discord.js').then(module => module.default),
+    discordRest: await import('@discordjs/rest').then(module => module.REST),
+    discordTypes: await import('discord-api-types/v9'),
+    octokit: await import('@octokit/rest').then(module => module.Octokit),
+    graphql: await import('@octokit/graphql').then(module => module.graphql),
+    axios: await import('axios').then(module => module.default),
+    crypto: await import('crypto').then(module => module.default),
+    simpleGit: await import('simple-git').then(module => module.default),
+    ethers: await import('ethers').then(module => module.default),
+    vaderSentiment: await import('vader-sentiment').then(module => module.default)
   }
   SA.version = require('./package.json').version
 
